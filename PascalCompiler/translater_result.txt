@@ -1,47 +1,55 @@
   0: t1 := a > b
-  1: min := b
-  2: min := a
-  3: t2 := x <> 1
-  4: t3 := x - 1
-  5: param t3
-  6: param p
-  7: call out, 2
-  8: p := 2
-  9: param p
- 10: call writeln, 1
- 11: param input
- 12: call assign, 1
- 13: param input
- 14: call reset, 1
- 15: param output
- 16: call assign, 1
- 17: param output
- 18: call rewrite, 1
- 19: param t
- 20: param v
- 21: param a
- 22: param w
- 23: call readln, 4
- 24: i := 1
- 25: t4 := i < t
- 26: param n
- 27: param b
- 28: call readln, 2
- 29: goto 25
- 30: param dp
- 31: param dp
- 32: call sizeof, 1
- 33: param 
- 34: param 63
- 35: call fillchar, 3
- 36: r := dp
- 37: dp := 0
- 38: ans := maxinteger
- 39: param ans
- 40: call writeln, 1
- 41: param t
- 42: param j
- 43: call out, 2
- 44: param output
- 45: call close, 1
- 46: 
+  1: if t1 goto 3
+  2: goto 5
+  3: min := b
+  4: goto 6
+  5: min := a
+  6: t2 := x <> 1
+  7: if t2 goto 9
+  8: goto 14
+  9: t3 := x - 1
+ 10: param t3
+ 11: param p
+ 12: call out, 2
+ 13: goto 15
+ 14: p := 2
+ 15: param p
+ 16: call writeln, 1
+ 17: param input
+ 18: call assign, 1
+ 19: param input
+ 20: call reset, 1
+ 21: param output
+ 22: call assign, 1
+ 23: param output
+ 24: call rewrite, 1
+ 25: param t
+ 26: param v
+ 27: param a
+ 28: param w
+ 29: call readln, 4
+ 30: i := 1
+ 31: t4 := i < t
+ 32: if t4 goto 34
+ 33: goto 38
+ 34: param n
+ 35: param b
+ 36: call readln, 2
+ 37: goto 31
+ 38: param dp
+ 39: param dp
+ 40: call sizeof, 1
+ 41: param 
+ 42: param 63
+ 43: call fillchar, 3
+ 44: r := dp
+ 45: dp := 0
+ 46: ans := maxinteger
+ 47: param ans
+ 48: call writeln, 1
+ 49: param t
+ 50: param j
+ 51: call out, 2
+ 52: param output
+ 53: call close, 1
+ 54: 

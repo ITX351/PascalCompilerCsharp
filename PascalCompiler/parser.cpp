@@ -195,8 +195,20 @@ public:
 				switch (TokenType(b))
 				{
 				case T_DO:
+					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "DoExpressionNotDone", "", "");
+					node.tmpLineNumber = nextquad;
+					gencode(C_GOTO_X, "DoGotoNotDone", "", "", "");
+					break;
 				case T_THEN:
-				case T_IDN: case T_INT: case T_REAL: // IDN, INT, REAL
+					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "ThenExpressionNotDone", "", "");
+					node.tmpLineNumber = nextquad;
+					gencode(C_GOTO_X, "ThenGotoNotDone", "", "", "");
+					break;
+				case T_ELSE:
+					node.tmpLineNumber = nextquad;
+					gencode(C_GOTO_X, "ElseGotoNotDone", "", "", "");
+					break;
+				case T_IDN: case T_INT: case T_REAL:
 					node.signName = words[i].second;
 					break;
 				}
@@ -317,11 +329,14 @@ public:
 		case 28: // statement => compound_statement
 			break;
 		case 29: // statement => T_IF expression T_THEN statement T_ELSE statement
+			commands[nodes[2].tmpLineNumber - 1].arg1 = nodes[1].signName;
+			commands[nodes[2].tmpLineNumber].result = intToString(nodes[5].lineNumber);
+			commands[nodes[4].tmpLineNumber].result = intToString(nextquad);
 			break;
 		case 30: // statement => T_WHILE expression T_DO statement
 			gencode(C_GOTO_X, intToString(nodes[0].lineNumber), "", "", "");
-			//commands[nodes[2].tmpLineNumber].result = intToString(nextquad);
-				
+			commands[nodes[2].tmpLineNumber - 1].arg1 = nodes[1].signName;
+			commands[nodes[2].tmpLineNumber].result = intToString(nextquad);
 			break;
 		case 31: // variable => T_IDN
 			node.signName = nodes[0].signName;
