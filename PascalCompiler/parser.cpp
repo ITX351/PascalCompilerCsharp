@@ -22,7 +22,7 @@ private:
 	typedef enum
 	{
 		C_X_ASS_Y_OP_Z = 0, C_X_ASS_OP_Y, C_X_ASS_Y, C_GOTO_X,
-		C_IF_X_GOTO, C_IF_X_RELOP_Y_GOTO, C_PARAM_X, C_CALL_P_N
+		C_IF_X_GOTO, C_IF_X_RELOP_Y_GOTO, C_PARAM_X, C_CALL_P_N, C_RET, C_TITLE
 	} CommandType;
 
 	typedef pair < int, string > IS;
@@ -214,6 +214,11 @@ public:
 					nowSignTable->enter(string("SignTable") + intToString(signTableCount), 2, newSignTable);
 					nowSignTable = newSignTable;
 					signTableCount++;
+					node.tmpLineNumber = nextquad;
+					if (TokenType(b) == T_FUNCTION)
+						gencode(C_TITLE, "FUNC ", "FunctionNotDone", "", "");
+					else
+						gencode(C_TITLE, "PROC ", "ProcedureNotDone", "", "");
 					break;
 				case T_DO:
 					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "DoExpressionNotDone", "", "");
@@ -333,16 +338,19 @@ public:
 		case 13: // subprogram_declarations =>
 			break;
 		case 14: // subprogram_declaration => subprogram_head declarations compound_statement
+			gencode(C_RET, "", "", "", "");
 			break;
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
 			oldSignTable = nowSignTable->fatherTable;
 			oldSignTable->offset += nowSignTable->offset;
 			nowSignTable = oldSignTable;
+			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
 			break;
 		case 16: // subprogram_head => T_PRODEDURE T_IDN arguments T_SEMICL
 			oldSignTable = nowSignTable->fatherTable;
 			oldSignTable->offset += nowSignTable->offset;
 			nowSignTable = oldSignTable;
+			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
 			break;
 		case 17: // arguments => T_LPAR parameter_list T_RPAR
 			break;
@@ -392,10 +400,10 @@ public:
 			// ARRAY TODO
 			break;
 		case 33: // procedure_statement => T_IDN
-			gencode(C_CALL_P_N, nodes[0].signName, "0", "", "");
+			gencode(C_CALL_P_N, "", nodes[0].signName, "", "0");
 			break;
 		case 34: // procedure_statement => T_IDN T_LPAR expression_list T_RPAR
-			gencode(C_CALL_P_N, nodes[0].signName, intToString(nodes[2].expressionNum), "", "");
+			gencode(C_CALL_P_N, "", nodes[0].signName, "", intToString(nodes[2].expressionNum));
 			break;
 		case 35: // expression_list => expression
 			node.expressionNum = 1;
@@ -438,8 +446,8 @@ public:
 			node.signName = nodes[0].signName;
 			break;
 		case 45: // factor => T_IDN T_LPAR expression_list T_RPAR
-			gencode(C_CALL_P_N, nodes[0].signName, intToString(nodes[2].expressionNum), "", "");
-			// TODO ·µ»ØÖµ
+			gencode(C_CALL_P_N, "", nodes[0].signName, "", intToString(nodes[2].expressionNum));
+			node.signName = string("F");
 			break;
 		case 46: // factor => num
 			node.signName = nodes[0].signName;
@@ -572,7 +580,13 @@ public:
 					fprintf(fp, "param %s", cmd.arg1.c_str());
 					break;
 				case C_CALL_P_N:
-					fprintf(fp, "call %s, %s", cmd.result.c_str(), cmd.arg1.c_str());
+					fprintf(fp, "call %s, %s", cmd.arg1.c_str(), cmd.arg2.c_str());
+					break;
+				case C_RET:
+					fprintf(fp, "ret\n");
+					break;
+				case C_TITLE:
+					fprintf(fp, "%s%s%s%s", cmd.result.c_str(), cmd.arg1.c_str(), cmd.op.c_str(), cmd.arg2.c_str());
 					break;
 				}
 			}
