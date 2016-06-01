@@ -1,0 +1,114 @@
+[nonterminal]
+	program
+	subprogram_declarations
+	identifier_list
+	declarations
+	compound_statement
+	declaration
+	type
+	standard_type
+	subprogram_declaration
+	subprogram_head
+	arguments
+	parameter_list
+	optional_statements
+	statement_list
+	statement
+	procedure_statement
+ 	variable
+ 	expression
+	expression_list
+	simple_expression
+	term
+	factor
+	sign
+	relop
+	addop
+	mulop
+	num
+[terminal]
+	T_PROGRAM
+	T_IDN
+	T_LPAR
+	T_RPAR
+	T_SEMICL
+	T_COMMA
+	T_VAR
+	T_COLON
+	T_DOUBLEPERIOD
+	T_OF
+	T_ARRAY
+	T_INTTYPE
+	T_REALTYPE
+	T_LBRKPAR
+	T_RBRKPAR
+	T_BEGIN
+	T_END
+	T_FUNCTION
+	T_PRODEDURE
+	T_IF
+	T_THEN
+	T_ELSE
+	T_WHILE
+	T_DO
+	T_ASS
+	T_NOT
+	T_EQL
+	T_NEQ
+	T_GT
+	T_GTE
+	T_LT
+	T_LTE
+	T_ADD
+	T_SUB
+	T_MUL
+	T_SLASH
+	T_INT
+	T_REAL
+[start]
+	program'
+[production]
+	program' => program ;
+	program => T_PROGRAM T_IDN T_LPAR identifier_list T_RPAR T_SEMICL
+			   declarations
+			   subprogram_declarations
+			   compound_statement ;
+	identifier_list => T_IDN | identifier_list T_COMMA T_IDN ;
+	declarations => T_VAR declaration T_SEMICL | ;
+	declaration => declaration T_SEMICL identifier_list T_COLON type |
+				   identifier_list T_COLON type ;
+	type => standard_type |
+			T_ARRAY T_LBRKPAR T_INT T_DOUBLEPERIOD T_INT T_RBRKPAR T_OF standard_type ;
+	standard_type => T_INTTYPE | T_REALTYPE ;
+	subprogram_declarations => subprogram_declarations
+							   subprogram_declaration T_SEMICL | ;
+	subprogram_declaration => subprogram_head
+							  declarations
+							  compound_statement ;
+	subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL |
+					   T_PRODEDURE T_IDN arguments T_SEMICL ;
+	arguments => T_LPAR parameter_list T_RPAR | ;
+	parameter_list => identifier_list T_COLON type |
+					  parameter_list T_SEMICL identifier_list T_COLON type ;
+	compound_statement => T_BEGIN optional_statements T_END ;
+	optional_statements => statement_list | ;
+	statement_list => statement | statement_list T_SEMICL statement ;
+	statement => variable T_ASS expression |
+				 procedure_statement |
+				 compound_statement |
+				 T_IF expression T_THEN statement T_ELSE statement |
+				 T_WHILE expression T_DO statement ;
+	variable => T_IDN | T_IDN T_LBRKPAR expression T_RBRKPAR ;
+	procedure_statement => T_IDN | T_IDN T_LPAR expression_list T_RPAR ;
+	expression_list => expression | expression_list T_COMMA expression ;
+	expression => simple_expression |
+				  simple_expression relop simple_expression ;
+	simple_expression => term | sign term |
+						 simple_expression addop term ;
+	term => factor | term mulop factor ;
+	factor => T_IDN | T_IDN T_LPAR expression_list T_RPAR | num | T_LPAR expression T_RPAR | T_NOT factor ;
+	sign => T_ADD | T_SUB ;
+	relop => T_EQL | T_NEQ | T_GT | T_GTE | T_LT | T_LTE ;
+	addop => T_ADD | T_SUB ;
+	mulop => T_MUL | T_SLASH ;
+	num => T_INT | T_REAL ;
