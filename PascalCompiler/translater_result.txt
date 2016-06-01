@@ -1,2 +1,2 @@
-Ñ := x - 1
-call sizeof, 
+t1 := x - 1
+call sizeof, 0
