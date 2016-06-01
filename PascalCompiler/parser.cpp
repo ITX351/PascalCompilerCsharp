@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <stack>
+#include <queue>
 #include "signtable.cpp"
 #include "constants.h"
 using namespace std;
@@ -52,12 +53,21 @@ private:
 		int expressionNum;
 		int tmpLineNumber;
 
-		Node() { expressionNum = 0; truelist.clear(); falselist.clear(); nextlist.clear(); }
+		vector < string > identifiers;
+		int declarationType;
+
+		Node() 
+		{ 
+			expressionNum = 0; 
+			truelist.clear(); 
+			falselist.clear(); 
+			nextlist.clear();
+			identifiers.clear();
+		}
 	};
 	stack < int > s1;
 	stack < Node > s2;
 	vector < Node > nodes;
-	signtable signTable;
 
 	struct Command
 	{
@@ -106,6 +116,8 @@ private:
 			commands[*iter].result = intToString(quad);
 	}
 
+	signtable* nowSignTable; int signTableCount;
+
 public:
 	Parser(vector < IS > _words)
 	{
@@ -119,6 +131,8 @@ public:
 		parseTable.clear();
 		commands.clear();
 		nextquad = tmpVar = 0;
+
+		nowSignTable = new signtable(NULL, signTableCount++);
 
 		int num = 0; FILE *fp;
 
@@ -192,8 +206,15 @@ public:
 				node.lineNumber = nextquad;
 				node.status = b;
 
+				signtable* newSignTable;
 				switch (TokenType(b))
 				{
+				case T_FUNCTION: case T_PRODEDURE:
+					newSignTable = new signtable(nowSignTable, signTableCount);
+					nowSignTable->enter(string("SignTable") + intToString(signTableCount), 2, newSignTable);
+					nowSignTable = newSignTable;
+					signTableCount++;
+					break;
 				case T_DO:
 					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "DoExpressionNotDone", "", "");
 					node.tmpLineNumber = nextquad;
@@ -267,6 +288,7 @@ public:
 
 		string var;
 
+		signtable* oldSignTable;
 		switch (reduceId)
 		{
 		case 0: // program' => program
@@ -274,24 +296,37 @@ public:
 		case 1: // program => T_PROGRAM T_IDN T_LPAR identifier_list T_RPAR T_SEMICL declarations subprogram_declarations compound_statement
 			break;
 		case 2: // identifier_list => T_IDN
+			node.identifiers.push_back(nodes[0].signName);
 			break;
 		case 3: // identifier_list => identifier_list T_COMMA T_IDN
+			node.identifiers = nodes[0].identifiers;
+			node.identifiers.push_back(nodes[2].signName);
 			break;
 		case 4: // declarations => T_VAR declaration T_SEMICL
 			break;
 		case 5: // declarations =>
 			break;
 		case 6: // declaration => declaration T_SEMICL identifier_list T_COLON type
+			for (vector<string>::iterator iter = nodes[2].identifiers.begin(); 
+				iter != nodes[2].identifiers.end(); iter++)
+				nowSignTable->enter(*iter, nodes[4].declarationType, NULL);
 			break;
 		case 7: // declaration => identifier_list T_COLON type
+			for (vector<string>::iterator iter = nodes[0].identifiers.begin(); 
+				iter != nodes[0].identifiers.end(); iter++)
+				nowSignTable->enter(*iter, nodes[2].declarationType, NULL);
 			break;
 		case 8: // type => standard_type
+			node.declarationType = nodes[0].declarationType;
 			break;
 		case 9: // type => T_ARRAY T_LBRKPAR T_INT T_DOUBLEPERIOD T_INT T_RBRKPAR T_OF standard_type
+			// TODO: ARRAY DECLARATION
 			break;
 		case 10: // standard_type => T_INTTYPE
+			node.declarationType = 0;
 			break;
 		case 11: // standard_type => T_REALTYPE
+			node.declarationType = 1;
 			break;
 		case 12: // subprogram_declarations => subprogram_declarations subprogram_declaration T_SEMICL
 			break;
@@ -300,16 +335,28 @@ public:
 		case 14: // subprogram_declaration => subprogram_head declarations compound_statement
 			break;
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
+			oldSignTable = nowSignTable->fatherTable;
+			oldSignTable->offset += nowSignTable->offset;
+			nowSignTable = oldSignTable;
 			break;
 		case 16: // subprogram_head => T_PRODEDURE T_IDN arguments T_SEMICL
+			oldSignTable = nowSignTable->fatherTable;
+			oldSignTable->offset += nowSignTable->offset;
+			nowSignTable = oldSignTable;
 			break;
 		case 17: // arguments => T_LPAR parameter_list T_RPAR
 			break;
 		case 18: // arguments =>
 			break;
 		case 19: // parameter_list => identifier_list T_COLON type
+			for (vector<string>::iterator iter = nodes[0].identifiers.begin(); 
+				iter != nodes[0].identifiers.end(); iter++)
+				nowSignTable->enter(*iter, nodes[2].declarationType, NULL);
 			break;
 		case 20: // parameter_list => parameter_list T_SEMICL identifier_list T_COLON type
+			for (vector<string>::iterator iter = nodes[2].identifiers.begin(); 
+				iter != nodes[2].identifiers.end(); iter++)
+				nowSignTable->enter(*iter, nodes[4].declarationType, NULL);
 			break;
 		case 21: // compound_statement => T_BEGIN optional_statements T_END
 			break;
@@ -449,6 +496,46 @@ public:
 			break;
 		}
 		return node;
+	}
+
+	void printSignTable()
+	{
+		FILE *fp = fopen("signtable_result.txt", "w");
+
+		queue<signtable*> q;
+		q.push(nowSignTable);
+		
+		while (!q.empty())
+		{
+			signtable* st = q.front(); q.pop();
+			fprintf(fp, "Table %d, \n\tfather table: ", st->number);
+			if (st->fatherTable == NULL)
+				fprintf(fp, "NULL");
+			else
+				fprintf(fp, "%d", st->fatherTable->number);
+			fprintf(fp, "\n");
+
+			for (vector<signtable::sign>::iterator iter = st->signs.begin(); 
+				iter != st->signs.end(); iter++)
+			{
+				fprintf(fp, "Name: %s, Offset: %d, Type: ", iter->name.c_str(), iter->offset);
+				switch (iter->type)
+				{
+				case 0:
+					fprintf(fp, "integer");
+					break;
+				case 1:
+					fprintf(fp, "real");
+					break;
+				case 2:
+					fprintf(fp, "signTable");
+					q.push(iter->table);
+					break;
+				}
+				fprintf(fp, "\n");
+			}
+			fprintf(fp, "\n");
+		}
 	}
 
 	void printcode()

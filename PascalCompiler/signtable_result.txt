@@ -1,0 +1,30 @@
+Table 0, 
+	father table: NULL
+Name: n, Offset: 0, Type: integer
+Name: b, Offset: 4, Type: integer
+Name: dp, Offset: 8, Type: integer
+Name: p, Offset: 12, Type: integer
+Name: ans, Offset: 16, Type: integer
+Name: z, Offset: 20, Type: integer
+Name: r, Offset: 24, Type: integer
+Name: v, Offset: 28, Type: integer
+Name: a, Offset: 32, Type: integer
+Name: w, Offset: 36, Type: integer
+Name: i, Offset: 40, Type: integer
+Name: j, Offset: 44, Type: integer
+Name: k, Offset: 48, Type: integer
+Name: t, Offset: 52, Type: integer
+Name: m, Offset: 56, Type: integer
+Name: SignTable1, Offset: 60, Type: signTable
+Name: SignTable2, Offset: 68, Type: signTable
+
+Table 1, 
+	father table: 0
+Name: a, Offset: 0, Type: integer
+Name: b, Offset: 4, Type: integer
+
+Table 2, 
+	father table: 0
+Name: x, Offset: 0, Type: integer
+Name: y, Offset: 4, Type: integer
+

@@ -11,21 +11,22 @@ using namespace std;
 
 int main()
 {
-    Scanner scanner;
-    scanner.init();
-    scanner.scan();
-    scanner.close();
+	Scanner scanner;
+	scanner.init();
+	scanner.scan();
+	scanner.close();
 
-    Parser parser(scanner.result);
-    parser.init();
-    int ret = parser.parse();
-    if (ret < 0)
-    {
-        printf("SUCCESSFULLY ACCEPTED.\n");
-        parser.printcode();
-    }
-    else
-        printf("ERROR ON LINE %d, %s.\n", ret, scanner.result[ret].second.c_str());
+	Parser parser(scanner.result);
+	parser.init();
+	int ret = parser.parse();
+	if (ret < 0)
+	{
+		printf("SUCCESSFULLY ACCEPTED.\n");
+		parser.printSignTable();
+		parser.printcode();
+	}
+	else
+		printf("ERROR ON LINE %d, %s.\n", ret, scanner.result[ret].second.c_str());
 
-    return 0;
+	return 0;
 }
