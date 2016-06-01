@@ -1,2 +1,45 @@
-t1 := x - 1
-call sizeof, 0
+t1 := a > b
+min := b
+min := a
+t2 := x <> 1
+t3 := x - 1
+param t3
+param p
+call out, 2
+p := 2
+param p
+call writeln, 1
+param input
+call assign, 1
+param input
+call reset, 1
+param output
+call assign, 1
+param output
+call rewrite, 1
+param t
+param v
+param a
+param w
+call readln, 4
+i := 1
+t4 := i < t
+param n
+param b
+call readln, 2
+param dp
+param dp
+call sizeof, 1
+param 
+param 63
+call fillchar, 3
+r := dp
+dp := 0
+ans := maxinteger
+param ans
+call writeln, 1
+param t
+param j
+call out, 2
+param output
+call close, 1

@@ -289,6 +289,7 @@ public:
 			case 25: // statement_list => statement_list T_SEMICL statement
 				break;
 			case 26: // statement => variable T_ASS expression
+				gencode(C_X_ASS_Y, nodes[0].signName, nodes[2].signName, "", "");
 				break;
 			case 27: // statement => procedure_statement
 				break;
@@ -299,20 +300,32 @@ public:
 			case 30: // statement => T_WHILE expression T_DO statement
 				break;
 			case 31: // variable => T_IDN
+				node.signName = nodes[0].signName;
 				break;
 			case 32: // variable => T_IDN T_LBRKPAR expression T_RBRKPAR
+				// ARRAY TODO
 				break;
 			case 33: // procedure_statement => T_IDN
+				gencode(C_CALL_P_N, nodes[0].signName, "0", "", "");
 				break;
 			case 34: // procedure_statement => T_IDN T_LPAR expression_list T_RPAR
+				gencode(C_CALL_P_N, nodes[0].signName, intToString(nodes[2].expressionNum), "", "");
 				break;
 			case 35: // expression_list => expression
+				node.expressionNum = 1;
+				gencode(C_PARAM_X, "", nodes[0].signName, "", "");
 				break;
 			case 36: // expression_list => expression_list T_COMMA expression
+				node.expressionNum = nodes[0].expressionNum + 1;
+				gencode(C_PARAM_X, "", nodes[2].signName, "", "");
 				break;
 			case 37: // expression => simple_expression
+				node.signName = nodes[0].signName;
 				break;
 			case 38: // expression => simple_expression relop simple_expression
+				var = nextTmpVar();
+				gencode(C_X_ASS_Y_OP_Z, var, nodes[0].signName, nodes[1].signName, nodes[2].signName);
+				node.signName = var;
 				break;
 			case 39: // simple_expression => term
 				node.signName = nodes[0].signName;
@@ -320,10 +333,12 @@ public:
 			case 40: // simple_expression => sign term
 				var = nextTmpVar();
 				gencode(C_X_ASS_OP_Y, var, nodes[1].signName, nodes[0].signName, "");
+				node.signName = var;
 				break;
 			case 41: // simple_expression => simple_expression addop term
 				var = nextTmpVar();
 				gencode(C_X_ASS_Y_OP_Z, var, nodes[0].signName, nodes[1].signName, nodes[2].signName);
+				node.signName = var;
 				break;
 			case 42: // term => factor
 				node.signName = nodes[0].signName;
@@ -331,12 +346,14 @@ public:
 			case 43: // term => term mulop factor
 				var = nextTmpVar();
 				gencode(C_X_ASS_Y_OP_Z, var, nodes[0].signName, nodes[1].signName, nodes[2].signName);
+				node.signName = var;
 				break;
 			case 44: // factor => T_IDN
 				node.signName = nodes[0].signName;
 				break;
 			case 45: // factor => T_IDN T_LPAR expression_list T_RPAR
 				gencode(C_CALL_P_N, nodes[0].signName, intToString(nodes[2].expressionNum), "", "");
+				// TODO ·µ»ØÖµ
 				break;
 			case 46: // factor => num
 				node.signName = nodes[0].signName;
@@ -347,6 +364,7 @@ public:
 			case 48: // factor => T_NOT factor
 				var = nextTmpVar();
 				gencode(C_X_ASS_OP_Y, var, nodes[1].signName, "not", "");
+				node.signName = var;
 				break;
 			case 49: // sign => T_ADD
 				node.signName = "add";

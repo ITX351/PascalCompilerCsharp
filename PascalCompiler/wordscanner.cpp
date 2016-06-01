@@ -145,9 +145,9 @@ public:
                 backForward(ch);
 
                 if (real)
-                    dealScan(T_INT, thisWord);
-                else
                     dealScan(T_REAL, thisWord);
+                else
+                    dealScan(T_INT, thisWord);
             }
             else
             {
@@ -239,11 +239,11 @@ public:
                     break;
                 case '>':
                     if ((ch = nextChar()) == '=')
-                        dealScan(T_GT, ">=");
+                        dealScan(T_GTE, ">=");
                     else
                     {
                         backForward(ch);
-                        dealScan(T_GTE, ">");
+                        dealScan(T_GT, ">");
                     }
                     break;
                 case '/':
