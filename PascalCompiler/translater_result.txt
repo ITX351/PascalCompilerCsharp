@@ -8,54 +8,28 @@
   7: ret
 
   8: PROC out
-  9: t2 := x <> 1
- 10: if t2 goto 12
- 11: goto 17
- 12: t3 := x - 1
- 13: param t3
- 14: param p
- 15: call out, 2
- 16: goto 18
- 17: p := 2
- 18: param p
- 19: call writeln, 1
- 20: ret
+  9: t2 := x * y
+ 10: z := t2
+ 11: param x
+ 12: call write, 1
+ 13: param y
+ 14: call write, 1
+ 15: param z
+ 16: call write, 1
+ 17: ret
 
- 21: param input
- 22: call assign, 1
- 23: param input
- 24: call reset, 1
- 25: param output
- 26: call assign, 1
- 27: param output
- 28: call rewrite, 1
- 29: param t
- 30: param v
- 31: param a
- 32: param w
- 33: call readln, 4
- 34: i := 1
- 35: t4 := i < t
- 36: if t4 goto 38
- 37: goto 42
- 38: param n
- 39: param b
- 40: call readln, 2
- 41: goto 35
- 42: param dp
- 43: param dp
- 44: call sizeof, 1
- 45: param F
- 46: param 63
- 47: call fillchar, 3
- 48: r := dp
- 49: dp := 0
- 50: ans := maxinteger
- 51: param ans
- 52: call writeln, 1
- 53: param t
- 54: param j
- 55: call out, 2
- 56: param output
- 57: call close, 1
- 58: 
+ 18: i := 1
+ 19:  := 5
+ 20: t3 := i <= 9
+ 21: if t3 goto 23
+ 22: goto 32
+ 23: j := 1
+ 24: t4 := j <= 9
+ 25: if t4 goto 27
+ 26: goto 31
+ 27: param i
+ 28: param j
+ 29: call out, 2
+ 30: goto 24
+ 31: goto 20
+ 32: 

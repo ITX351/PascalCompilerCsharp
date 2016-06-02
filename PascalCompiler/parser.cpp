@@ -502,6 +502,9 @@ public:
 		case 62: // num => T_REAL
 			node.signName = nodes[0].signName;
 			break;
+		case 63: // factor => T_IDN T_LBRKPAR expression T_RBRKPAR
+			printf("gui yue dao zhe le ");
+			break;
 		}
 		return node;
 	}

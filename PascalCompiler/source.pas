@@ -1,27 +1,20 @@
-program arugal(arugalplot);
-var n,b: integer;
-    dp: integer;
-     p: integer;
-  ans,z,r,v,a,w,i,j,k,t,m:integer;
+program nine(nine, nine);
+var i, j: integer;
 function min(a,b:integer):integer;
 begin if a>b then min:=b else min:=a end;
-procedure out(x,y:integer);
+procedure out(x, y: integer);
+var z: integer;
 begin
-if x<>1 then out(x-1,p) else p := 2;
-writeln(p)
+	z := x * y;
+	write(x); write(y); write(z)
 end;
 begin
-assign(input);reset(input);
-assign(output);rewrite(output);
- readln(t,v,a,w);
- i:=1;
-while i<t do
- readln(n,b);
-fillchar(dp,sizeof(dp),63);
-r:=dp;
-dp:=0;
-ans:=maxinteger;
-writeln(ans);
-out(t,j);
-close(output)
+	i := 1;
+	i := j[5];
+	while i <= 9 do
+	begin
+		j := 1;
+		while j <= 9 do
+			out(i, j)
+	end
 end

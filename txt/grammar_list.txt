@@ -61,3 +61,4 @@ mulop => T_MUL
 mulop => T_SLASH
 num => T_INT
 num => T_REAL
+factor => T_IDN T_LBRKPAR expression T_RBRKPAR
