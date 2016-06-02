@@ -348,18 +348,15 @@ public:
 		case 13: // subprogram_declarations =>
 			break;
 		case 14: // subprogram_declaration => subprogram_head declarations compound_statement
+			oldSignTable = nowSignTable->fatherTable;
+			oldSignTable->offset += nowSignTable->offset;
+			nowSignTable = oldSignTable;
 			gencode(C_RET, "", "", "", "");
 			break;
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
-			oldSignTable = nowSignTable->fatherTable;
-			oldSignTable->offset += nowSignTable->offset;
-			nowSignTable = oldSignTable;
 			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
 			break;
 		case 16: // subprogram_head => T_PRODEDURE T_IDN arguments T_SEMICL
-			oldSignTable = nowSignTable->fatherTable;
-			oldSignTable->offset += nowSignTable->offset;
-			nowSignTable = oldSignTable;
 			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
 			break;
 		case 17: // arguments => T_LPAR parameter_list T_RPAR
@@ -531,7 +528,7 @@ public:
 		while (!q.empty())
 		{
 			signtable* st = q.front(); q.pop();
-			fprintf(fp, "Table %d, \n\tfather table: ", st->number);
+			fprintf(fp, "Table %d, \n\tOffset: %d. Father table: ", st->number, st->offset);
 			if (st->fatherTable == NULL)
 				fprintf(fp, "NULL");
 			else
