@@ -1,21 +1,36 @@
-program nine(nine, nine);
-var p, i, j, w: integer;
-    d: array[3..10] of integer;
-function min(a,b:integer):integer;
-begin if a>b then min:=b else min:=a end;
-procedure out(x, y: integer);
-var z: integer;
+program exProcedure(nice, nice);
+var
+  i, j, k: integer;
+  a: array[1..5] of integer;
+function min(x, y: integer): integer; 
 begin
-	z := x * y;
-	write(x); write(y); write(z)
+	if x < y then
+	  min := x
+	else
+	  min := y
 end;
 begin
-	i[j] := 1;
-	i := j[5];
-	while i <= 9 do
+	a[1] := 3;
+	a[2] := 5;
+	a[3] := 4;
+	a[4] := 1;
+	a[5] := 2;
+	k := min(a[1], a[2]);
+	
+	i := 1;
+	while i <= 5 do
 	begin
-		j := 1;
-		while j <= 9 do
-			out(i, j)
+		j := i + 1;
+		while j <= 5 do
+		begin
+			if a[j] < a[j - 1] then
+			begin
+				k := a[j];
+				a[j] := a[j - 1];
+				a[j - 1] := k
+			end
+			else
+				k := 0
+		end
 	end
 end

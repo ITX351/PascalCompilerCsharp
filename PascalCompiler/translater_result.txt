@@ -1,36 +1,47 @@
   0: FUNC min
-  1: t1 := a > b
+  1: t1 := x < y
   2: if t1 goto 4
   3: goto 6
-  4: min := b
+  4: min := x
   5: goto 7
-  6: min := a
+  6: min := y
   7: ret
 
-  8: PROC out
-  9: t2 := x * y
- 10: z := t2
- 11: param x
- 12: call write, 1
- 13: param y
- 14: call write, 1
- 15: param z
- 16: call write, 1
- 17: ret
-
- 18: i[j] := 1
- 19: t3 := j[5]
- 20: i := t3
- 21: t4 := i <= 9
- 22: if t4 goto 24
- 23: goto 33
- 24: j := 1
- 25: t5 := j <= 9
- 26: if t5 goto 28
- 27: goto 32
- 28: param i
- 29: param j
- 30: call out, 2
- 31: goto 25
- 32: goto 21
- 33: 
+  8: a[1] := 3
+  9: a[2] := 5
+ 10: a[3] := 4
+ 11: a[4] := 1
+ 12: a[5] := 2
+ 13: t2 := a[1]
+ 14: param t2
+ 15: t3 := a[2]
+ 16: param t3
+ 17: call min, 2
+ 18: k := F
+ 19: i := 1
+ 20: t4 := i <= 5
+ 21: if t4 goto 23
+ 22: goto 45
+ 23: t5 := i + 1
+ 24: j := t5
+ 25: t6 := j <= 5
+ 26: if t6 goto 28
+ 27: goto 44
+ 28: t7 := a[j]
+ 29: t8 := j - 1
+ 30: t9 := a[t8]
+ 31: t10 := t7 < t9
+ 32: if t10 goto 34
+ 33: goto 42
+ 34: t11 := a[j]
+ 35: k := t11
+ 36: t12 := j - 1
+ 37: t13 := a[t12]
+ 38: a[j] := t13
+ 39: t14 := j - 1
+ 40: a[t14] := k
+ 41: goto 43
+ 42: k := 0
+ 43: goto 25
+ 44: goto 20
+ 45: 
