@@ -19,6 +19,8 @@ using namespace std;
 class Parser
 {
 private:
+	const int MAXLONGINT = 0x7f7f7f7f;
+	typedef signtable::Type Type;
 	typedef enum
 	{
 		C_X_ASS_Y_OP_Z = 0, C_X_ASS_OP_Y, C_X_ASS_Y, C_GOTO_X,
@@ -53,7 +55,7 @@ private:
 		int tmpLineNumber;
 
 		vector < string > identifiers;
-		int declarationType;
+		Type declarationType;
 
 		Node() 
 		{ 
@@ -97,6 +99,13 @@ private:
 	{
 		sprintf(iToA, "%d", i);
 		return string(iToA);
+	}
+
+	int stringToInt(const string& str)
+	{
+		int ret;
+		sscanf(str.c_str(), "%d", &ret);
+		return ret;
 	}
 
 	vector<int> merge(vector<int> a, vector<int> b)
@@ -210,7 +219,8 @@ public:
 				{
 				case T_FUNCTION: case T_PRODEDURE:
 					newSignTable = new signtable(nowSignTable, signTableCount);
-					nowSignTable->enter(string("SignTable") + intToString(signTableCount), 2, newSignTable);
+					nowSignTable->enter(string("SignTable") + intToString(signTableCount), 
+						Type(2, 0, MAXLONGINT), newSignTable);
 					nowSignTable = newSignTable;
 					signTableCount++;
 					node.tmpLineNumber = nextquad;
@@ -324,13 +334,14 @@ public:
 			node.declarationType = nodes[0].declarationType;
 			break;
 		case 9: // type => T_ARRAY T_LBRKPAR T_INT T_DOUBLEPERIOD T_INT T_RBRKPAR T_OF standard_type
-			// TODO: ARRAY DECLARATION
+			node.declarationType = Type(nodes[7].declarationType.type, 
+				stringToInt(nodes[2].signName), stringToInt(nodes[4].signName));
 			break;
 		case 10: // standard_type => T_INTTYPE
-			node.declarationType = 0;
+			node.declarationType = Type(0, 0, MAXLONGINT); // single INT(0)
 			break;
 		case 11: // standard_type => T_REALTYPE
-			node.declarationType = 1;
+			node.declarationType = Type(1, 0, MAXLONGINT); // single REAL(1)
 			break;
 		case 12: // subprogram_declarations => subprogram_declarations subprogram_declaration T_SEMICL
 			break;
@@ -531,7 +542,7 @@ public:
 				iter != st->signs.end(); iter++)
 			{
 				fprintf(fp, "Name: %s, Offset: %d, Type: ", iter->name.c_str(), iter->offset);
-				switch (iter->type)
+				switch (iter->type.type)
 				{
 				case 0:
 					fprintf(fp, "integer");
@@ -544,6 +555,8 @@ public:
 					q.push(iter->table);
 					break;
 				}
+				if (iter->type.high != MAXLONGINT)
+					fprintf(fp, ", LOW=%d, HIGH=%d", iter->type.low, iter->type.high);
 				fprintf(fp, "\n");
 			}
 			fprintf(fp, "\n");

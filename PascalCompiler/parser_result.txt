@@ -18,6 +18,14 @@ Status move in 14, Alphas move in 19.
 Status move in 8, Alphas move in 24.
 REDUCED By 3.
 POP (10, 24) (8, 19) (14, 41) and PUSH 41, GOTO 14.
+Status move in 14, Alphas move in 19.
+Status move in 8, Alphas move in 24.
+REDUCED By 3.
+POP (10, 24) (8, 19) (14, 41) and PUSH 41, GOTO 14.
+Status move in 14, Alphas move in 19.
+Status move in 8, Alphas move in 24.
+REDUCED By 3.
+POP (10, 24) (8, 19) (14, 41) and PUSH 41, GOTO 14.
 Status move in 14, Alphas move in 18.
 Status move in 22, Alphas move in 7.
 REDUCED By 10.
@@ -26,6 +34,25 @@ REDUCED By 8.
 POP (38, 46) and PUSH 45, GOTO 37.
 REDUCED By 7.
 POP (37, 45) (22, 18) (14, 41) and PUSH 44, GOTO 15.
+Status move in 15, Alphas move in 35.
+Status move in 23, Alphas move in 24.
+REDUCED By 2.
+POP (6, 24) and PUSH 41, GOTO 42.
+Status move in 42, Alphas move in 18.
+Status move in 67, Alphas move in 0.
+Status move in 39, Alphas move in 26.
+Status move in 66, Alphas move in 25.
+Status move in 97, Alphas move in 20.
+Status move in 114, Alphas move in 25.
+Status move in 122, Alphas move in 32.
+Status move in 125, Alphas move in 9.
+Status move in 127, Alphas move in 7.
+REDUCED By 10.
+POP (40, 7) and PUSH 46, GOTO 128.
+REDUCED By 9.
+POP (128, 46) (127, 9) (125, 32) (122, 25) (114, 20) (97, 25) (66, 26) (39, 0) and PUSH 45, GOTO 98.
+REDUCED By 6.
+POP (98, 45) (67, 18) (42, 41) (23, 35) (15, 44) and PUSH 44, GOTO 15.
 Status move in 15, Alphas move in 35.
 REDUCED By 4.
 POP (23, 35) (15, 44) (12, 14) and PUSH 42, GOTO 11.

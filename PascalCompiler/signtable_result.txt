@@ -1,10 +1,13 @@
 Table 0, 
 	father table: NULL
-Name: i, Offset: 0, Type: integer
-Name: j, Offset: 4, Type: integer
-Name: SignTable1, Offset: 8, Type: signTable
-Name: SignTable2, Offset: 16, Type: signTable
-Name: z, Offset: 24, Type: integer
+Name: p, Offset: 0, Type: integer
+Name: i, Offset: 4, Type: integer
+Name: j, Offset: 8, Type: integer
+Name: w, Offset: 12, Type: integer
+Name: d, Offset: 16, Type: integer, LOW=3, HIGH=10
+Name: SignTable1, Offset: 48, Type: signTable
+Name: SignTable2, Offset: 56, Type: signTable
+Name: z, Offset: 64, Type: integer
 
 Table 1, 
 	father table: 0

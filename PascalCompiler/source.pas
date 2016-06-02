@@ -1,5 +1,6 @@
 program nine(nine, nine);
-var i, j: integer;
+var p, i, j, w: integer;
+    d: array[3..10] of integer;
 function min(a,b:integer):integer;
 begin if a>b then min:=b else min:=a end;
 procedure out(x, y: integer);

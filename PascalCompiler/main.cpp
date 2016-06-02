@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
+#include <cstdlib>
 #include "wordscanner.cpp"
 #include "parser.cpp"
 using namespace std;
@@ -27,6 +28,6 @@ int main()
 	}
 	else
 		printf("ERROR ON LINE %d, %s.\n", ret, scanner.result[ret].second.c_str());
-
+	system("pause");
 	return 0;
 }
