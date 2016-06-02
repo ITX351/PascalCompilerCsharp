@@ -298,7 +298,10 @@ public:
 	Node translate(int reduceId)
 	{
 		Node node;
-		node.lineNumber = nextquad;
+		if ((int)nodes.size() > 0)
+			node.lineNumber = nodes[0].lineNumber;
+		else
+			node.lineNumber = nextquad;
 
 		string var;
 
