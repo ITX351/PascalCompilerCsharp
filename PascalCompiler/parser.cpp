@@ -22,13 +22,12 @@ private:
 	typedef enum
 	{
 		C_X_ASS_Y_OP_Z = 0, C_X_ASS_OP_Y, C_X_ASS_Y, C_GOTO_X,
-		C_IF_X_GOTO, C_IF_X_RELOP_Y_GOTO, C_PARAM_X, C_CALL_P_N, C_RET, C_TITLE
+		C_IF_X_GOTO, C_IF_X_RELOP_Y_GOTO, C_PARAM_X, C_CALL_P_N, 
+		C_RET, C_TITLE, C_X_ASS_Y_ARR_Z
 	} CommandType;
 
 	typedef pair < int, string > IS;
 	typedef pair < int, int > II;
-
-//    map < string, int > signTable;
 	vector < IS > words;
 
 	struct Reduce
@@ -397,7 +396,7 @@ public:
 			node.signName = nodes[0].signName;
 			break;
 		case 32: // variable => T_IDN T_LBRKPAR expression T_RBRKPAR
-			// ARRAY TODO
+			node.signName = nodes[0].signName + string("[") + nodes[2].signName + string("]");
 			break;
 		case 33: // procedure_statement => T_IDN
 			gencode(C_CALL_P_N, "", nodes[0].signName, "", "0");
@@ -503,7 +502,9 @@ public:
 			node.signName = nodes[0].signName;
 			break;
 		case 63: // factor => T_IDN T_LBRKPAR expression T_RBRKPAR
-			printf("gui yue dao zhe le ");
+			var = nextTmpVar();
+			gencode(C_X_ASS_Y_ARR_Z, var, nodes[0].signName, "", nodes[2].signName);
+			node.signName = var;
 			break;
 		}
 		return node;
@@ -590,6 +591,9 @@ public:
 					break;
 				case C_TITLE:
 					fprintf(fp, "%s%s%s%s", cmd.result.c_str(), cmd.arg1.c_str(), cmd.op.c_str(), cmd.arg2.c_str());
+					break;
+				case C_X_ASS_Y_ARR_Z:
+					fprintf(fp, "%s := %s[%s]", cmd.result.c_str(), cmd.arg1.c_str(), cmd.arg2.c_str());
 					break;
 				}
 			}

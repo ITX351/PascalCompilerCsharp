@@ -18,18 +18,19 @@
  16: call write, 1
  17: ret
 
- 18: i := 1
- 19:  := 5
- 20: t3 := i <= 9
- 21: if t3 goto 23
- 22: goto 32
- 23: j := 1
- 24: t4 := j <= 9
- 25: if t4 goto 27
- 26: goto 31
- 27: param i
- 28: param j
- 29: call out, 2
- 30: goto 24
- 31: goto 20
- 32: 
+ 18: i[j] := 1
+ 19: t3 := j[5]
+ 20: i := t3
+ 21: t4 := i <= 9
+ 22: if t4 goto 24
+ 23: goto 33
+ 24: j := 1
+ 25: t5 := j <= 9
+ 26: if t5 goto 28
+ 27: goto 32
+ 28: param i
+ 29: param j
+ 30: call out, 2
+ 31: goto 25
+ 32: goto 21
+ 33: 

@@ -9,7 +9,7 @@ begin
 	write(x); write(y); write(z)
 end;
 begin
-	i := 1;
+	i[j] := 1;
 	i := j[5];
 	while i <= 9 do
 	begin
