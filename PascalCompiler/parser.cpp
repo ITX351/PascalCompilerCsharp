@@ -216,7 +216,7 @@ public:
 				signtable* newSignTable;
 				switch (TokenType(b))
 				{
-				case T_FUNCTION: case T_PRODEDURE:
+				case T_FUNCTION: case T_PROCEDURE:
 					newSignTable = new signtable(nowSignTable, signTableCount);
 					nowSignTable->enter(string("SignTable") + intToString(signTableCount), 
 						Type(2, 0, MAXLONGINT), newSignTable);
@@ -354,7 +354,7 @@ public:
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
 			commands[nodes[0].lineNumber].arg1 = nodes[1].signName;
 			break;
-		case 16: // subprogram_head => T_PRODEDURE T_IDN arguments T_SEMICL
+		case 16: // subprogram_head => T_PROCEDURE T_IDN arguments T_SEMICL
 			commands[nodes[0].lineNumber].arg1 = nodes[1].signName;
 			break;
 		case 17: // arguments => T_LPAR parameter_list T_RPAR
