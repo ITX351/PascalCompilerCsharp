@@ -350,6 +350,8 @@ public:
 			oldSignTable->offset += nowSignTable->offset;
 			nowSignTable = oldSignTable;
 			gencode(C_RET, "", "", "", "");
+			nowSignTable->signs[(int)nowSignTable->signs.size() - 1].name = 
+				commands[nodes[0].lineNumber].arg1; // 将符号表的名称改为函数或过程的名称
 			break;
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
 			commands[nodes[0].lineNumber].arg1 = nodes[1].signName;

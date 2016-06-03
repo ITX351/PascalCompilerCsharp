@@ -4,7 +4,7 @@ Name: i, Offset: 0, Type: integer
 Name: j, Offset: 4, Type: integer
 Name: k, Offset: 8, Type: integer
 Name: a, Offset: 12, Type: integer, LOW=1, HIGH=5
-Name: SignTable1, Offset: 32, Type: signTable
+Name: min, Offset: 32, Type: signTable
 
 Table 1, 
 	Offset: 8. Father table: 0
