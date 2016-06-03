@@ -52,7 +52,6 @@ private:
 		vector < int > truelist, falselist, nextlist;
 
 		int expressionNum;
-		int tmpLineNumber;
 
 		vector < string > identifiers;
 		Type declarationType;
@@ -223,7 +222,6 @@ public:
 						Type(2, 0, MAXLONGINT), newSignTable);
 					nowSignTable = newSignTable;
 					signTableCount++;
-					node.tmpLineNumber = nextquad;
 					if (TokenType(b) == T_FUNCTION)
 						gencode(C_TITLE, "FUNC ", "FunctionNotDone", "", "");
 					else
@@ -231,16 +229,13 @@ public:
 					break;
 				case T_DO:
 					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "DoExpressionNotDone", "", "");
-					node.tmpLineNumber = nextquad;
 					gencode(C_GOTO_X, "DoGotoNotDone", "", "", "");
 					break;
 				case T_THEN:
 					gencode(C_IF_X_GOTO, intToString(nextquad + 2), "ThenExpressionNotDone", "", "");
-					node.tmpLineNumber = nextquad;
 					gencode(C_GOTO_X, "ThenGotoNotDone", "", "", "");
 					break;
 				case T_ELSE:
-					node.tmpLineNumber = nextquad;
 					gencode(C_GOTO_X, "ElseGotoNotDone", "", "", "");
 					break;
 				case T_IDN: case T_INT: case T_REAL:
@@ -357,10 +352,10 @@ public:
 			gencode(C_RET, "", "", "", "");
 			break;
 		case 15: // subprogram_head => T_FUNCTION T_IDN arguments T_COLON standard_type T_SEMICL
-			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
+			commands[nodes[0].lineNumber].arg1 = nodes[1].signName;
 			break;
 		case 16: // subprogram_head => T_PRODEDURE T_IDN arguments T_SEMICL
-			commands[nodes[0].tmpLineNumber].arg1 = nodes[1].signName;
+			commands[nodes[0].lineNumber].arg1 = nodes[1].signName;
 			break;
 		case 17: // arguments => T_LPAR parameter_list T_RPAR
 			break;
@@ -394,14 +389,14 @@ public:
 		case 28: // statement => compound_statement
 			break;
 		case 29: // statement => T_IF expression T_THEN statement T_ELSE statement
-			commands[nodes[2].tmpLineNumber - 1].arg1 = nodes[1].signName;
-			commands[nodes[2].tmpLineNumber].result = intToString(nodes[5].lineNumber);
-			commands[nodes[4].tmpLineNumber].result = intToString(nextquad);
+			commands[nodes[2].lineNumber].arg1 = nodes[1].signName;
+			commands[nodes[2].lineNumber + 1].result = intToString(nodes[5].lineNumber);
+			commands[nodes[4].lineNumber].result = intToString(nextquad);
 			break;
 		case 30: // statement => T_WHILE expression T_DO statement
 			gencode(C_GOTO_X, intToString(nodes[0].lineNumber), "", "", "");
-			commands[nodes[2].tmpLineNumber - 1].arg1 = nodes[1].signName;
-			commands[nodes[2].tmpLineNumber].result = intToString(nextquad);
+			commands[nodes[2].lineNumber].arg1 = nodes[1].signName;
+			commands[nodes[2].lineNumber + 1].result = intToString(nextquad);
 			break;
 		case 31: // variable => T_IDN
 			node.signName = nodes[0].signName;
